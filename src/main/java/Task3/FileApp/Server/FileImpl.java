@@ -46,7 +46,7 @@ public class FileImpl implements FileInterface {
             return data;
         } catch (IOException e) {
             System.out.println("FileImpl: could not read '" + fileName + "': " + e);
-            return null;
+            throw new FileServiceException("Failed to read file '" + fileName + "' on the server.", e);
         }
     }
 
