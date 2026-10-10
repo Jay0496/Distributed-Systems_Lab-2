@@ -41,25 +41,30 @@ public class FileImpl implements FileInterface {
         }
     }
 
+    //Download file method
     @Override
     public byte[] downloadFile(String fileName) throws FileServiceException {
         String clientHost = "Unknown";
         try {
+            //Connect to client host
             clientHost = RemoteServer.getClientHost();
         } catch (ServerNotActiveException e) {
             System.err.println("Could not get client host: " + e.getMessage());
         }
 
+        //Output Client IP and requested file
         System.out.println("\nClient connected from IP/Host: " + clientHost);
         System.out.println("Requested file: '" + fileName + "'");
 
         Path filePath = serverDir.resolve(fileName);
 
+        //Throw exception
         if (!Files.exists(filePath) || Files.isDirectory(filePath)) {
             System.err.println("FileImpl error: File '" + fileName + "' does not exist on server.");
             throw new FileServiceException("File '" + fileName + "' was not found on the server.");
         }
 
+        // Send file or throw exception
         try {
             byte[] data = Files.readAllBytes(Path.of("Task4/FileApp/Server/" + fileName));
             System.out.println("Successfully served file: '" + fileName + "' (" + data.length + " bytes)");
@@ -70,6 +75,7 @@ public class FileImpl implements FileInterface {
         }
     }
 
+    // List available file on the server
     @Override
     public List<String> listFiles() throws FileServiceException {
         String clientHost = "Unknown";
@@ -104,6 +110,7 @@ public class FileImpl implements FileInterface {
         String clientHost = getClientHost();
         String threadName = Thread.currentThread().getName();
 
+        // Output the thread name, IP, filename, and number of byes
         System.out.println("\n>>> [" + threadName + "] Starting upload from client (" + clientHost + "): '" + fileName + "' (" + content.length + " bytes)");
 
         // Obtain or compute a lock specific to this filename
@@ -112,15 +119,16 @@ public class FileImpl implements FileInterface {
 
         try {
             // Simulate slight IO processing time to easily demonstrate interleaved concurrent calls
-            Thread.sleep(800);
+            Thread.sleep(1500);
 
             Path targetPath = serverDir.resolve(fileName);
             Files.write(targetPath, content);
 
             int currentTotal = uploadCounter.incrementAndGet();
 
+            //Notify that the upload has finished.
             System.out.println("<<< [" + threadName + "] Upload finished for: '" + fileName + "'. Server Total Uploads Count: " + currentTotal);
-
+        // throw errors
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new FileServiceException("Upload interrupted on server.");

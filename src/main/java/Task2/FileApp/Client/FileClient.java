@@ -33,6 +33,7 @@ public class FileClient {
 
             System.out.println("Returned class: " + fi.getClass().getName());
 
+            // Print proxy class details for exploration
             String[] boundNames = registry.list();
             System.out.println("Names bound in registry:");
             for (String name : boundNames) {
@@ -50,6 +51,7 @@ public class FileClient {
             Path target = Path.of("Task2/FileApp/Client/" + Path.of(fileName).getFileName().toString());
             Files.write(target, data);
 
+            // Task 2 Requirement: Print success message on the client containing the file name and size in bytes
             System.out.println("\nFile downloaded successfully!");
             System.out.println("File Name: " + Path.of(fileName).getFileName().toString());
             System.out.println("Size: " + data.length + " bytes");

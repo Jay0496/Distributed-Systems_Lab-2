@@ -1,7 +1,9 @@
 package Task3.FileApp;
 
 /**
- * Custom exception thrown when a file service operation fails (e.g., file not found).
+ * Task 3 Requirement: Custom exception class for the file service.
+ * Extends Exception and implements Serializable (via Exception hierarchy)
+ * so it can be serialized across the network from server to client.
  */
 public class FileServiceException extends Exception {
 

@@ -20,27 +20,34 @@ import java.util.List;
  */
 public class FileImpl implements FileInterface {
 
+    // Define Server Directory
     private final Path serverDir = Path.of("Task3/FileApp/Server/");
+
+    // Download file method
     @Override
     public byte[] downloadFile(String fileName) throws FileServiceException {
         String clientHost = "Unknown";
         try {
+            // Connect to client host
             clientHost = RemoteServer.getClientHost();
         } catch (ServerNotActiveException e) {
             System.err.println("Could not get client host: " + e.getMessage());
         }
 
+        // Get host IP address
         System.out.println("\nClient connected from IP/Host: " + clientHost);
         System.out.println("Requested file: '" + fileName + "'");
 
         Path filePath = serverDir.resolve(fileName);
 
+        // Task 3 Requirement: Check file existence and throw custom exception instead of returning null
         if (!Files.exists(filePath) || Files.isDirectory(filePath)) {
             System.err.println("FileImpl error: File '" + fileName + "' does not exist on server.");
             throw new FileServiceException("File '" + fileName + "' was not found on the server.");
         }
 
         try {
+            // Returns file and prints the number of bytes
             byte[] data = Files.readAllBytes(Path.of("Task3/FileApp/Server/" + fileName));
             System.out.println("Successfully served file: '" + fileName + "' (" + data.length + " bytes)");
             return data;
@@ -50,21 +57,25 @@ public class FileImpl implements FileInterface {
         }
     }
 
+    // List files available on the server
     @Override
     public List<String> listFiles() throws FileServiceException {
         String clientHost = "Unknown";
         try {
+            // Connect to client host
             clientHost = RemoteServer.getClientHost();
         } catch (ServerNotActiveException e) {
             System.err.println("Could not get client host: " + e.getMessage());
         }
 
+        // Output client IP
         System.out.println("\nClient connected from IP/Host: " + clientHost + " requested file list.");
 
         File folder = serverDir.toFile();
         File[] listOfFiles = folder.listFiles();
         List<String> fileNames = new ArrayList<>();
 
+        // Populate list with valid files from the server directory
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
                 if (file.isFile()) {
@@ -75,6 +86,7 @@ public class FileImpl implements FileInterface {
             throw new FileServiceException("Unable to read server directory.");
         }
 
+        // Return the list
         System.out.println("Returned " + fileNames.size() + " files to client.");
         return fileNames;
     }

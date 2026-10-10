@@ -32,6 +32,7 @@ public class FileClient {
 
         String action = args[0].toLowerCase();
 
+        // Parse action and execute corresponding handler method
         if (action.equals("list")) {
             String host = args[1];
             int port = (args.length > 2) ? Integer.parseInt(args[2]) : Registry.REGISTRY_PORT;
@@ -61,6 +62,7 @@ public class FileClient {
             printUsage();
         }
     }
+    // Output list of files on the server
     private static void handleList(String host, int port) {
         try {
             FileInterface fi = getStub(host, port);
@@ -75,6 +77,7 @@ public class FileClient {
         }
     }
 
+    // Download a file from the serverf
     private static void handleDownload(String fileName, String host, int port) {
         try {
             // 1. Locate the registry on the server machine and look up the stub.
@@ -97,6 +100,7 @@ public class FileClient {
         }
     }
 
+    // Upload a file to the server
     private static void handleUpload(String fileName, String host, int port) {
         try {
             Path clientDir = Path.of("Task4/FileApp/Client/");
@@ -116,11 +120,11 @@ public class FileClient {
             System.out.println("Size: " + content.length + " bytes");
 
         } catch (FileServiceException e) {
-            System.err.println("[Server Error]: " + e.getMessage());
+            System.err.println("Server Error: " + e.getMessage());
         } catch (IOException e) {
-            System.err.println("[Client IO Error]: Could not read local file: " + e.getMessage());
+            System.err.println("Client IO Error: Could not read local file: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("[Client/RMI Error]: " + e.getMessage());
+            System.err.println("Client/RMI Error: " + e.getMessage());
         }
     }
 

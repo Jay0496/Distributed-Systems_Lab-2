@@ -14,6 +14,10 @@ import java.nio.file.Path;
  */
 public class FileImpl implements FileInterface {
 
+    /**
+     * Serves text or binary files to the requesting client.
+     * Resolves files relative to the designated server directory path.
+     */
     @Override
     public byte[] downloadFile(String fileName) {
         try {

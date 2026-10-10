@@ -31,8 +31,10 @@ public class FileClient {
             Registry registry = LocateRegistry.getRegistry(host, port);
             FileInterface fi = (FileInterface) registry.lookup("FileServer");
 
+            // Task 1c: Print dynamic proxy stub class name (demonstrates location transparency)
             System.out.println("Returned class: " + fi.getClass().getName());
 
+            // Task 1c: Print all bound identifiers currently published in the registry
             String[] boundNames = registry.list();
             System.out.println("Names bound in registry:");
             for (String name : boundNames) {
@@ -46,10 +48,11 @@ public class FileClient {
                 return;
             }
 
-            // 3. Save the file in the current directory under its base name.
+            // 3. Task 1b: Save byte payload to local client folder under original filename
             Path target = Path.of("Task1/FileApp/Client/" + Path.of(fileName).getFileName().toString());
             Files.write(target, data);
         } catch (Exception e) {
+            // Task 1c: Catches java.rmi.ConnectException if executed while server is inactive
             System.err.println("FileClient error: " + e);
             e.printStackTrace();
         }

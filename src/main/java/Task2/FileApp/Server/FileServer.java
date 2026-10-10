@@ -17,7 +17,7 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class FileServer {
 
-    // Kept in static fields so they are never garbage collected
+    // Kept in static fields, so they are never garbage collected
     // while the server is running.
     private static FileImpl impl;
     private static Registry registry;
@@ -35,6 +35,7 @@ public class FileServer {
             registry = LocateRegistry.createRegistry(port);
             registry.rebind("FileServer", stub);
 
+            // Task 2 Requirement: Print clear startup messages confirming the server is running and listening
             System.out.println("FileServer successfully started!");
             System.out.println("Registry listening on port: " + port);
             System.out.println("Waiting for client requests...");
